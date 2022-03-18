@@ -28,17 +28,31 @@ export class SocketGateway implements OnGatewayInit, OnGatewayConnection, OnGate
    this.server.emit('chat', payload);
    this.logger.log(payload);
  }
+  @SubscribeMessage('user')
+  usernew(client: Socket, payload: string): void {
+    const response = {
+      id: client.id,
+      payload:payload
+    }
+   this.server.emit('users', response);
+   this.logger.log(payload);
+  }
+  @SubscribeMessage('likemessage')
+ like(client: Socket, payload: string): void {
+   this.server.emit('like', payload);
+   this.logger.log(payload);
+ }
 
  afterInit(server: Server) {
   this.logger.log('Init');
  }
 
  handleDisconnect(client: Socket) {
-  this.logger.log(`Client disconnected: ${client.id}`);
+   this.logger.log(`Client disconnected: ${client.id}`);
+   this.server.emit('userexit', client.id);
  }
 
   handleConnection(client: Socket, ...args: any[]) {
-   this.server.emit('users', client.id);
    this.logger.log(`Client connected: ${client.id}`);
  }
 }
