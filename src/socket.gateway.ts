@@ -25,7 +25,8 @@ export class SocketGateway implements OnGatewayInit, OnGatewayConnection, OnGate
 
  @SubscribeMessage('msgToServer')
  handleMessage(client: Socket, payload: string): void {
-  this.server.emit('msgToClient', payload);
+   this.server.emit('chat', payload);
+   this.logger.log(payload);
  }
 
  afterInit(server: Server) {
@@ -36,9 +37,9 @@ export class SocketGateway implements OnGatewayInit, OnGatewayConnection, OnGate
   this.logger.log(`Client disconnected: ${client.id}`);
  }
 
- handleConnection(client: Socket, ...args: any[]) {
+  handleConnection(client: Socket, ...args: any[]) {
+   this.server.emit('users', client.id);
    this.logger.log(`Client connected: ${client.id}`);
-   this.server.emit('chat', "oi");
  }
 }
 
