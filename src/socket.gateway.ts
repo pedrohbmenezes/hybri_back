@@ -26,7 +26,6 @@ export class SocketGateway implements OnGatewayInit, OnGatewayConnection, OnGate
  @SubscribeMessage('msgToServer')
  handleMessage(client: Socket, payload: string): void {
    this.server.emit('chat', payload);
-   this.logger.log(payload);
  }
   @SubscribeMessage('user')
   usernew(client: Socket, payload: string): void {
